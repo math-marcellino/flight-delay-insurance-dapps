@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+html{
+  scroll-behavior: smooth;
+}
+
+/* width */
+::-webkit-scrollbar {
+width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: rgba(31, 41, 55, var(--tw-bg-opacity));
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: rgba(49, 46, 129, var(--tw-bg-opacity));
+border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 44, 100, var(--tw-bg-opacity));
+}
