@@ -1,6 +1,6 @@
 import { useContractFunction } from "@usedapp/core";
 import { utils } from 'ethers';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Contract } from "@ethersproject/contracts";
 import ContractABI from '../artifacts/contracts/FlightDelayInsurance.sol/FlightDelayInsurance.json';
 import { Interface } from "@ethersproject/abi";
