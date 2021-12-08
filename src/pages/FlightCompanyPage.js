@@ -48,6 +48,7 @@ const FlightCompanyPage = () => {
             setFunctionName('');
         } else if(functionName === 'registerFlightEvent'){
             send(eventFlightID.current.value, delayDuration.current.value, delayReason.current.value);
+            setFunctionName('');
         }
     }, [functionName, send])
 
