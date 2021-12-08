@@ -77,4 +77,33 @@ main()
   });
 ```
 
-## 
+## How to use the dApp
+Make sure you have installed Metamask as your browser extension
+
+https://metamask.io/
+
+![image](https://user-images.githubusercontent.com/81855912/145211318-ad19247f-6968-4313-96d1-f7a21ca5c51e.png)
+
+Choose Ropsten Test Network and make sure you have ETH balance in your wallet
+
+![image](https://user-images.githubusercontent.com/81855912/145211513-cc6097fb-409d-4a47-89ff-0aabe230f3dd.png)
+
+Connect your Metamask wallet 
+
+![image](https://user-images.githubusercontent.com/81855912/145213977-bb370d2b-ba20-4091-b124-2a05d5f24948.png)
+
+![image](https://user-images.githubusercontent.com/81855912/145214122-23db4953-1cb4-43b1-a8d2-b3650ae30e95.png)
+
+Website will render specific page according to the user role. (Note : this functionality is still in development and still hard-coded)
+
+### User Page
+This page will be rendered when any unregistered wallet address is connected
+![image](https://user-images.githubusercontent.com/81855912/145215062-ef4f201a-3def-4250-bdac-6ed134f07bfe.png)
+
+### Airline Company Page
+This page will be rendered when registered Airline Company wallet address is connected (0x9C625bbdCdE7d336006c106c716209a06c59A658)
+![image](https://user-images.githubusercontent.com/81855912/145215520-4e0afc95-1c48-4daf-8651-bf4a3a014209.png)
+
+### Owner Page
+This page will be rendered when owner of the smart contract wallet address is connected (0x0D9d7fe338846A4B093d4A3A0a585A6752b66889)
+![image](https://user-images.githubusercontent.com/81855912/145215727-06688c63-4e21-41de-8cd7-d6a557bb75b4.png)
