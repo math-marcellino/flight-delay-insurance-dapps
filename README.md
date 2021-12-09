@@ -127,10 +127,10 @@ Here is the function in the smart contract. This function has onlyOwner custom m
 function withdrawEther(uint ethAmount) public onlyOwner payable{
     uint availableBalance = address(this).balance - lockedBalance;
     uint weiAmount = ethAmount * 10**18; //conver eth to wei
-    \*
+    /*
       The line below will not allow the owner to withdraw all the liquidity inside the smart contract,
       but only the available balance (which is total balance - locked liquidity)
-    *\
+    */
     require(availableBalance >= weiAmount, "Not enough available ether to be withdrawn!");
     owner.transfer(weiAmount);
 }
@@ -146,7 +146,8 @@ Here is the function in the smart contract. This function has onlyOwner custom m
 
 ```solidity
 function registerAirline(address _airlineAddr, string memory _name) public onlyOwner{
-    airlineName[_airlineAddr] = _name; //data will be stored in a mapping that will take airline address as key and airline name as value
+    //data will be stored in a mapping that will take airline address as key and airline name as value
+    airlineName[_airlineAddr] = _name; 
 }
 ```
 
@@ -154,6 +155,76 @@ function registerAirline(address _airlineAddr, string memory _name) public onlyO
 This page will be rendered when registered Airline Company wallet address is connected (0x9C625bbdCdE7d336006c106c716209a06c59A658)
 
 ![image](https://user-images.githubusercontent.com/81855912/145215520-4e0afc95-1c48-4daf-8651-bf4a3a014209.png)
+
+### Register Flight Data
+
+Airline Company can input a new flight data, which include the flight ID, departure time, and arrival time.
+
+![image](https://user-images.githubusercontent.com/81855912/145318118-71b6eec9-3110-49a8-9da2-264afa6b3102.png)
+
+Here is the function in the smart contract. This function has onlyRegisteredAirline custom modifier that only allows registered airline company to access this function.
+
+```solidity
+function registerFlight(string memory _flightID, uint _departTime, uint _arriveTime) public onlyRegisteredAirline{ 
+    //input will be checked, if the arrival time is bigger than departure time, it will throw error message
+    require(_arriveTime > _departTime, "Please input a valid departure and arrival time!"); 
+    //data will be stored in a mapping that will take flightID as key and flightData struct as value
+    flightID[_flightID].airline = airlineName[msg.sender];
+    flightID[_flightID].departTime = _departTime;
+    flightID[_flightID].arriveTime = _arriveTime;
+    flightID[_flightID].exist = true;
+}
+```
+
+### Register Flight Event
+
+Airline Company can register a flight event of a registered flight, whether that flight is delayed or not, the reason of the delay and how long is the delay.
+
+![image](https://user-images.githubusercontent.com/81855912/145319342-d5403191-e4a6-4359-a766-94c4a4856a4b.png)
+
+Here is the function in the smart contract. This function has onlyRegisteredAirline custom modifier that only allows registered airline company to access this function. This function will also trigger the claim process for every address that buy the insurance for a specific flight if the delay condition is met.
+
+```solidity
+function registerFlightEvent(string memory _flightID, uint _delayDuration, uint _delayReason) public onlyRegisteredAirline flightFinished(_flightID){
+    //comparing string of airline name from flight data and airline account (only the right airline can access a specific flight)
+    require(keccak256(abi.encodePacked(flightID[_flightID].airline)) == keccak256(abi.encodePacked(airlineName[msg.sender])), "Please enter the flight from your airline!");
+
+    flightID[_flightID].delayDuration = _delayDuration;
+
+    if(_delayReason == 0){
+        flightID[_flightID].delayReason = Delayed.None;
+    } else if(_delayReason == 1){
+        flightID[_flightID].delayReason = Delayed.LateArrival;
+    } else if(_delayReason == 2){
+        flightID[_flightID].delayReason = Delayed.MechanicalIssue;
+    } else if(_delayReason == 3){
+        flightID[_flightID].delayReason = Delayed.Weather;
+    } else if(_delayReason == 4){
+        flightID[_flightID].delayReason = Delayed.Canceled;
+    }
+
+    /*
+        The code below will execute the claim process for every customer.
+        if the flight is canceled, then every customer that buy the insurance get refund
+        if the flight is delayed for 45 minutes or more because of late arrival, mechanical issue, or weather, 
+        then they will be paid 3 times the premium they paid
+        if the flight is not delayed (or delayed < 45 minutes) nor canceled, customer will not receive anything
+    */
+    if(flightID[_flightID].delayReason == Delayed.Canceled){ 
+        for(uint i = 0; i < flightID[_flightID].orders.length; i++){
+            lockedBalance -= flightID[_flightID].orders[i].premiumPaid * 3; //balance unlocked
+            payable(flightID[_flightID].orders[i].customer).transfer(flightID[_flightID].orders[i].premiumPaid);
+        }
+    } else if(flightID[_flightID].delayReason != Delayed.Canceled && flightID[_flightID].delayReason != Delayed.None){
+        if(_delayDuration >= 45){
+            for(uint i = 0; i < flightID[_flightID].orders.length; i++){
+                lockedBalance -= flightID[_flightID].orders[i].premiumPaid * 3; //balance unlocked
+                payable(flightID[_flightID].orders[i].customer).transfer(flightID[_flightID].orders[i].premiumPaid * 3);
+            }
+        }
+    }
+}
+```
 
 ## User Page
 This page will be rendered when any unregistered wallet address is connected
