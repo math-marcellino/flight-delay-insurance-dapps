@@ -178,6 +178,13 @@ function withdrawEther(uint ethAmount) public onlyOwner payable{
 }
 ```
 
+### Contract Balance Status
+Available contract balance and locked contract balance will be shown to owner, so owner can input the right amount of ETH to be withdrawn.
+
+Note : When customer order an insurance, the smart contract will automatically lock 3 times of the premium paid by customer to insure that there is enough liquidity to pay to customer when the delay condition is met and the owner cannot withdraw it.
+
+![image](https://user-images.githubusercontent.com/81855912/145324447-8a543b37-ff62-4918-b8e2-01c6d01cb1f1.png)
+
 ### Register Airline
 
 Owner can register a wallet address as an airline company, which will grant them privilege to input flight data and flight event.
