@@ -227,9 +227,28 @@ function registerFlightEvent(string memory _flightID, uint _delayDuration, uint 
 ```
 
 ## User Page
-This page will be rendered when any unregistered wallet address is connected
+This page will be rendered when any unregistered wallet address is connected. In this page, customer can buy a flight delay insurance by inputting their flight ID and the amount of ETH they want to pay. The insurance details and rules are shown on the right side of the screen.
 
 ![image](https://user-images.githubusercontent.com/81855912/145215062-ef4f201a-3def-4250-bdac-6ed134f07bfe.png)
+
+```solidity
+function orderInsurance(string memory _flightID) public payable flightExist(_flightID){
+    require(msg.value >= 0.01 ether && msg.value <= 0.06 ether, "You can only pay between 0.01 to 0.06 ether for the premium!");
+    require(flightID[_flightID].departTime - block.timestamp >= 12 hours, "You can only buy this insurance at least 12 hours before your flight departure!");
+    require(address(this).balance - lockedBalance >= msg.value * 3, "Ether reserve in smart contract is too litte, please try again later!"); 
+
+    history memory _order;
+    _order.customer = msg.sender;
+    _order.premiumPaid = msg.value;
+    _order.orderedAt = block.timestamp;
+    flightID[_flightID].orders.push(_order);
+    /* 
+        When customer order an insurance, the smart contract will automatically lock 3 times of the premium paid by customer
+        to insure that there is enough liquidity to pay to customer when the delay condition is met.
+    */
+    lockedBalance += msg.value * 3;
+}
+```
 
 ## Future Work & Improvement
 - This dApps doesn't have funtionality to show the list of registered airline company, history of user's orders, and list of flights due to the complexity of querying data from smart contract, so it will be implemented in near future.
