@@ -57,6 +57,7 @@ const UserPage = () => {
                     <li>Customer can only buy the insurance 12 hours prior to the flight departure to prevent smart contract exploitation</li>
                     <li>Customer order will revert if the contract doesn't have enough liquidity to pay customer</li>
                     <li>Claim process will be automatic, ETH will be sent to customer's wallet once the insurance conditions are fulfilled</li>
+                    <li>The claim amount will be 3 times of the premium the customer paid</li>
                 </ul>
             </div>
             <ToastContainer
