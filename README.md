@@ -112,8 +112,11 @@ const contractInterface = new utils.Interface(ContractABI.abi);
 const contractAddress = '0x4ec57258BDCE96f3C4e5fe1b3f6f45e359be34f5';
 const contract = new Contract(contractAddress, contractInterface);
 
-\\ 'send' is a function that will be called on button click in React
+// 'send' is a function that will be called on button click in React
 const {state, send} = useContractFunction(contract, functionName);
+
+// example of executing send() function
+send(args1, {value: utils.parseEther(etherAmountToBeTransacted)});
 ```
 
 ## How to use the dApp
