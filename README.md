@@ -77,6 +77,45 @@ main()
   });
 ```
 
+## Interacting with Blockchain from Client-side
+In this dApps, useDapp library is used to build interaction between client-side and the blockchain. useDapp is a library that provides a custom React Hooks that can be used to interact with blockchain (network, transaction, wallet, or smart contract).
+
+### Connect Metamask Wallet to the Client-side Application
+useDApp library has a custom react hook called "useEthers" that returns :
+- activateBrowserWallet : a function that will open Metamask window on user's browser and connect their wallet to the dApps
+- account : address of the currently connected wallet from Metamask
+- deactivate : a function that will disconnect user's Metamask wallet from the dApps
+
+```javascript
+// activateBrowserWallet and deactivate function will be called on button click in React
+const { activateBrowserWallet, account, deactivate } = useEthers();
+```
+
+### Getting Value from Smart Contract (public attribute or getter function)
+useDApp has a custom react hook called "useContractCall" which can be used to call a public attribute or getter function from smart contract. This hook will take 3 arguments, which are abi, address, and method to be called, and then returns a value from smart contract.
+
+```javascript
+const contractBalance = useContractCall({
+    abi: contractInterface,
+    address: contractAddress,
+    method: 'getContractBalance' //name of the method/function
+})
+```
+
+### Execute Operation in Smart Contract Function
+useDapp has a custom react hook called "useContractFunction" to call a setter function inside a smart contract. This hook will take 2 arguments, which are the contract abstract and the function name to be called. In this case, the hook will return :
+- state : the state of the transaction (detailed information about the transaction, like success or fail, the gas fee used, etc)
+- send : a function that can be used to call the smart contract setter function. It take serveral arguments that has been defined in smart contract setter function and a value (ETH amount to be transacted)
+
+```javascript
+const contractInterface = new utils.Interface(ContractABI.abi);
+const contractAddress = '0x4ec57258BDCE96f3C4e5fe1b3f6f45e359be34f5';
+const contract = new Contract(contractAddress, contractInterface);
+
+\\ 'send' is a function that will be called on button click in React
+const {state, send} = useContractFunction(contract, functionName);
+```
+
 ## How to use the dApp
 Make sure you have installed Metamask as your browser extension
 
@@ -230,6 +269,8 @@ function registerFlightEvent(string memory _flightID, uint _delayDuration, uint 
 This page will be rendered when any unregistered wallet address is connected. In this page, customer can buy a flight delay insurance by inputting their flight ID and the amount of ETH they want to pay. The insurance details and rules are shown on the right side of the screen.
 
 ![image](https://user-images.githubusercontent.com/81855912/145215062-ef4f201a-3def-4250-bdac-6ed134f07bfe.png)
+
+Here is the function in the smart contract.
 
 ```solidity
 function orderInsurance(string memory _flightID) public payable flightExist(_flightID){
