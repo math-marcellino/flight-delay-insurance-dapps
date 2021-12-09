@@ -96,14 +96,71 @@ Connect your Metamask wallet
 
 Website will render specific page according to the user role. (Note : this functionality is still in development and still hard-coded)
 
-### User Page
-This page will be rendered when any unregistered wallet address is connected
-![image](https://user-images.githubusercontent.com/81855912/145215062-ef4f201a-3def-4250-bdac-6ed134f07bfe.png)
+## Owner Page
+This page will be rendered when owner of the smart contract wallet address is connected (0x0D9d7fe338846A4B093d4A3A0a585A6752b66889)
 
-### Airline Company Page
+![image](https://user-images.githubusercontent.com/81855912/145215727-06688c63-4e21-41de-8cd7-d6a557bb75b4.png)
+
+### Deposit Liquidity
+
+Owner can deposit the desired amount of ETH to the smart contract as reserve to provide liquidity to run the insurance service (like paying the customer's claim)
+
+![image](https://user-images.githubusercontent.com/81855912/145315372-0fa95465-f48d-47b0-9f54-24a85a85be43.png)
+
+Here is the function in the smart contract. This function has onlyOwner custom modifier that only allows owner to access this function.
+
+```solidity
+function depositEther() public onlyOwner payable{
+    payable(address(this)).transfer(msg.value); //send ETH from owner to contract address
+}
+```
+
+### Withdraw Liquidity
+
+Owner can withdraw the desired amount of ETH from the smart contract to take the profit generated from the service.
+
+![image](https://user-images.githubusercontent.com/81855912/145316185-c333a981-f054-4ce6-ae08-5794787dcb6c.png)
+
+Here is the function in the smart contract. This function has onlyOwner custom modifier that only allows owner to access this function.
+
+```solidity
+function withdrawEther(uint ethAmount) public onlyOwner payable{
+    uint availableBalance = address(this).balance - lockedBalance;
+    uint weiAmount = ethAmount * 10**18; //conver eth to wei
+    \*
+      The line below will not allow the owner to withdraw all the liquidity inside the smart contract,
+      but only the available balance (which is total balance - locked liquidity)
+    *\
+    require(availableBalance >= weiAmount, "Not enough available ether to be withdrawn!");
+    owner.transfer(weiAmount);
+}
+```
+
+### Register Airline
+
+Owner can register a wallet address as an airline company, which will grant them privilege to input flight data and flight event.
+
+![image](https://user-images.githubusercontent.com/81855912/145317575-cf3facd6-c5da-47a6-ad4a-5ccfd571162b.png)
+
+Here is the function in the smart contract. This function has onlyOwner custom modifier that only allows owner to access this function.
+
+```solidity
+function registerAirline(address _airlineAddr, string memory _name) public onlyOwner{
+    airlineName[_airlineAddr] = _name; //data will be stored in a mapping that will take airline address as key and airline name as value
+}
+```
+
+## Airline Company Page
 This page will be rendered when registered Airline Company wallet address is connected (0x9C625bbdCdE7d336006c106c716209a06c59A658)
+
 ![image](https://user-images.githubusercontent.com/81855912/145215520-4e0afc95-1c48-4daf-8651-bf4a3a014209.png)
 
-### Owner Page
-This page will be rendered when owner of the smart contract wallet address is connected (0x0D9d7fe338846A4B093d4A3A0a585A6752b66889)
-![image](https://user-images.githubusercontent.com/81855912/145215727-06688c63-4e21-41de-8cd7-d6a557bb75b4.png)
+## User Page
+This page will be rendered when any unregistered wallet address is connected
+
+![image](https://user-images.githubusercontent.com/81855912/145215062-ef4f201a-3def-4250-bdac-6ed134f07bfe.png)
+
+## Future Work & Improvement
+- This dApps doesn't have funtionality to show the list of registered airline company, history of user's orders, and list of flights due to the complexity of querying data from smart contract, so it will be implemented in near future.
+- Website design & user interface improvement.
+- Getting flight data from real world flight data API.
