@@ -3,21 +3,6 @@
 ## Refer to the link below to access the full smart contract documentation
 https://github.com/math-marcellino/Flight-Delay-Insurance-Smart-Contract/
 
-## IF671-A Blockchain & Cryptocurrency Universitas Multimedia Nusantara
-- Name : Matthew Marcellino
-- NIM : 00000036291
-
-4 Feature Keypoints :
-- Byzantine Fault Tolerance : this dApps is implemented in EVM based blockchain, so it automatically inherit the Byzantine Fault Tolernace nature
-- No Choke Point : the backend of this smart contract is deployed on Ropsten Testnet, which have many nodes, so it has no single point of failure
-- Transparent : smart contract source code is transparent and can be verified here
-https://ropsten.etherscan.io/address/0x4ec57258BDCE96f3C4e5fe1b3f6f45e359be34f5
-
-![image](https://user-images.githubusercontent.com/81855912/145331425-6a8e81e5-b6b4-4151-b105-e0fd0c1bdff8.png)
-![image](https://user-images.githubusercontent.com/81855912/145331566-fa065810-db51-4db4-a580-11915129fe2d.png)
-
-- Scalable : this dApps is EVM based and currently deployed on Ropsten Test Network. But because it is EVM Based, it can also be deployed in other EVM compatible blockchain that is more scalable like Polygon, Binance Smart Chain, or Avalanche.
-
 ## Project Overview
 This decentralized application project provides decentralized flight delay insurance service which runs on Ethereum blockchain (currently Ropsten Testnet). In this dApps, people can buy insurance for their flight in case their flight schedule is delayed. This service runs on a blockchain so customer don't need to worry about paperworks, their data privacy, or even trust the insurance company. The claim process of this insurnace will be executed automatically once the condition is met, so customer can sit back and worry no more about the conventional time-consuming claim process.
 
